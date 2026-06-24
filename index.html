@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Порно360</title>
+    <title>ПорноYes</title>
     <style>
         :root {
             --bg-main: #090d16;
@@ -15,6 +15,7 @@
             --text-muted: #7d8a9e;
             --border: #212e46;
             --danger: #f85149;
+            --admin-color: #ffaa00;
         }
 
         * {
@@ -48,7 +49,7 @@
             display: flex;
         }
 
-        /* --- ЭКРАН АВТОРИЗАЦИИ --- */
+        /* --- АВТОРИЗАЦИЯ --- */
         .auth-screen {
             justify-content: center;
             align-items: center;
@@ -102,7 +103,6 @@
             border-radius: 10px;
             color: var(--text-main);
             font-size: 1rem;
-            transition: border-color 0.2s;
         }
 
         .auth-input:focus {
@@ -110,7 +110,7 @@
             border-color: var(--accent);
         }
 
-        /* --- ОСНОВНОЙ ИНТЕРФЕЙС --- */
+        /* --- ШАПКА И НАВИГАЦИЯ --- */
         header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -126,7 +126,6 @@
             font-size: 1.4rem;
             font-weight: 800;
             color: #fff;
-            letter-spacing: -0.5px;
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -143,11 +142,6 @@
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-logout:hover {
-            background: var(--bg-input);
-            color: var(--danger);
         }
 
         .user-badge {
@@ -158,48 +152,50 @@
             border-radius: 20px;
             border: 1px solid var(--border);
             font-weight: 600;
-            max-width: 90px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
-        /* Навигация */
         .navigation {
             display: flex;
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .navigation::-webkit-scrollbar { display: none; }
 
         .nav-btn {
             flex: 1;
+            min-width: 75px;
             background: none;
             border: none;
             color: var(--text-muted);
             padding: 14px 5px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
             border-bottom: 3px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
         }
 
         .nav-btn.active {
             color: var(--text-main);
             border-bottom-color: var(--accent);
         }
+        
+        #adminTab.active {
+            border-bottom-color: var(--admin-color);
+            color: var(--admin-color);
+        }
 
-        /* Контентная зона */
         .content-area {
             flex: 1;
             background: var(--bg-main);
             overflow-y: auto;
             padding: 12px;
-            padding-bottom: 90px; /* Отступ под плавающую кнопку */
+            padding-bottom: 90px;
         }
 
-        /* Сетка строго 2 в ряд (Пропорции 9:16) */
+        /* --- ГАЛЕРЕЯ (МЕДИА 9:16) --- */
         .grid-view {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -217,13 +213,27 @@
             cursor: pointer;
         }
 
-        .grid-item img {
+        .grid-item img, .grid-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        /* Кнопка удаления */
+        .video-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .delete-btn {
             position: absolute;
             top: 8px;
@@ -234,112 +244,108 @@
             border-radius: 50%;
             width: 28px;
             height: 28px;
-            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             z-index: 5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* Авторы фото в общей ленте */
         .photo-author {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding: 20px 8px 8px 8px;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            padding: 25px 8px 8px 8px;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #fff;
             pointer-events: none;
         }
 
-        /* Плавающая кнопка */
+        /* --- АДМИН-ПАНЕЛЬ --- */
+        .admin-panel {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .admin-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .admin-user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-user-row:last-child { border: none; }
+        .admin-btns {
+            display: flex;
+            gap: 6px;
+        }
+        .adm-btn {
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .adm-btn.ban { background: var(--danger); }
+        .adm-btn.unban { background: var(--accent); }
+        .adm-btn.ip { background: #388bfd; }
+
+        /* Элементы управления */
         .fab-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 20px; right: 20px;
             background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 14px 24px;
-            font-size: 1rem;
-            font-weight: 700;
+            color: white; border: none; border-radius: 50px;
+            padding: 14px 24px; font-size: 1rem; font-weight: 700;
             box-shadow: 0 8px 20px rgba(46, 160, 67, 0.4);
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            cursor: pointer; z-index: 10; display: flex; align-items: center; gap: 8px;
         }
-        .fab-btn:hover { background: var(--accent-hover); }
 
-        /* Элементы модалок */
         .btn {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
+            background: var(--accent); color: #fff; border: none;
+            padding: 14px; border-radius: 10px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; width: 100%;
         }
+
+        /* Модалка загрузки */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(5, 7, 12, 0.9);
-            z-index: 100;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            background: rgba(5, 7, 12, 0.9); z-index: 100;
+            display: none; justify-content: center; align-items: center; padding: 20px;
         }
         .modal.active { display: flex; }
         .modal-body {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 340px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 25px; border-radius: 20px; width: 100%; max-width: 340px;
         }
-        .modal-body h3 { margin: 0 0 15px 0; font-size: 1.3rem; }
+        .modal-body h3 { margin: 0 0 15px 0; }
         .modal-body select, .modal-body input[type="file"] {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            font-size: 1rem;
+            width: 100%; padding: 12px; background: var(--bg-input);
+            border: 1px solid var(--border); color: var(--text-main);
+            border-radius: 10px; margin-bottom: 15px; font-size: 1rem;
         }
         #status { text-align: center; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; }
         .modal-actions { display: flex; gap: 10px; }
         .modal-actions button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;}
         .btn-cancel { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); }
 
-        /* ПОЛНОЭКРАННЫЙ РЕЖИМ */
+        /* Полноэкранный плеер/просмотр */
         .viewer-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 200;
-            display: none;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.95); z-index: 200;
+            display: none; justify-content: center; align-items: center;
         }
         .viewer-overlay.active { display: flex; }
-        .viewer-overlay img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+        .viewer-overlay img, .viewer-overlay video {
+            max-width: 100%; max-height: 100%; object-fit: contain;
         }
     </style>
 </head>
@@ -347,8 +353,8 @@
 
     <div id="screenAuth" class="screen auth-screen active">
         <div class="auth-container">
-            <h2>Порно360</h2>
-            <p>Вход / Создание аккаунта</p>
+            <h2>ПорноYes</h2>
+            <p>Вход в единую систему</p>
             
             <div class="input-group">
                 <label for="loginInput">ЛОГИН</label>
@@ -360,7 +366,7 @@
                 <input type="password" id="passwordInput" class="auth-input" placeholder="••••••••">
             </div>
             
-            <button class="btn" style="margin-top: 10px;" onclick="handleAuth()">Войти</button>
+            <button class="btn" id="authBtn" style="margin-top: 10px;" onclick="handleAuth()">Войти</button>
         </div>
     </div>
 
@@ -375,11 +381,24 @@
             <button class="nav-btn active" onclick="switchTab('Приватное', this)">Приватное</button>
             <button class="nav-btn" onclick="switchTab('Аниме', this)">Аниме</button>
             <button class="nav-btn" onclick="switchTab('Реал', this)">Реал</button>
+            <button class="nav-btn" onclick="switchTab('Фурри', this)">Фурри</button>
             <button class="nav-btn" onclick="switchTab('Видео', this)">Видео</button>
+            <button class="nav-btn" id="adminTab" style="display:none;" onclick="switchTab('Люди', this)">Люди</button>
         </div>
 
         <div class="content-area">
             <div id="galleryGrid" class="grid-view"></div>
+            
+            <div id="adminPanel" class="admin-panel">
+                <div class="admin-card">
+                    <h3 style="margin-top:0; color:var(--admin-color);">Список пользователей</h3>
+                    <div id="usersList">Загрузка...</div>
+                </div>
+                <div class="admin-card">
+                    <h3 style="margin-top:0; color:var(--danger);">Заблокированные IP</h3>
+                    <div id="ipsList">Список пуст</div>
+                </div>
+            </div>
         </div>
 
         <button class="fab-btn" onclick="openModal()">
@@ -392,66 +411,126 @@
         <div class="modal-body">
             <h3>Новая публикация</h3>
             <select id="uploadCategory">
-                <option value="Приватное">Приватное</option>
+                <option value="Приватное">Приватное </option>
                 <option value="Аниме">Аниме</option>
                 <option value="Реал">Реал</option>
                 <option value="Фурри">Фурри</option>
+                <option value="Видео">Видео</option>
             </select>
-            <input type="file" id="fileInput" accept="image/*">
+            <input type="file" id="fileInput" accept="image/*,video/*">
             <div id="status"></div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Отмена</button>
-                <button class="btn" style="width:auto; flex:1;" onclick="uploadPhoto()">Загрузить</button>
+                <button class="btn" id="uploadBtn" style="width:auto; flex:1;" onclick="uploadMedia()">Загрузить</button>
             </div>
         </div>
     </div>
 
     <div id="imageViewer" class="viewer-overlay" onclick="closeImageViewer()">
-        <img id="viewerImg" src="" alt="Full View">
+        <img id="viewerImg" src="" alt="Full View" style="display:none;">
+        <video id="viewerVideo" controls autoplay style="display:none;"></video>
     </div>
 
     <script>
         const CLOUD_NAME = 'dic7fcdgy';
         const UPLOAD_PRESET = 'ctefeth_780';
+        
+        // Новая база данных структуры v3 для поддержки банов и типов данных
+        const DB_BASE = 'https://kvdb.io/u7z2x9w4_flowers360_db_v3/';
 
         let currentUser = null;
         let currentTab = 'Приватное';
+        let clientIP = "0.0.0.0";
 
-        // Инициализация баз данных из локального хранилища браузера
-        let usersDB = JSON.parse(localStorage.getItem('flowers_users')) || {}; 
-        let photosDB = JSON.parse(localStorage.getItem('flowers_photos_main')) || [];
+        // Определение IP адреса при старте
+        async function fetchIPAndCheck() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                clientIP = data.ip;
+                
+                // Проверяем бан по IP сразу в облаке
+                let bannedIPs = await loadFromCloud('banned_ips', []);
+                if (bannedIPs.includes(clientIP)) {
+                    document.body.innerHTML = `<div style="display:flex; height:100vh; justify-content:center; align-items:center; background:#090d16; color:var(--danger); font-family:sans-serif; font-size:1.3rem; text-align:center; padding:25px; font-weight:bold;">Доступ заблокирован администратором.<br><span style='font-size:0.9rem; color:var(--text-muted); font-weight:normal; display:block; margin-top:10px;'>Ваш IP (${clientIP}) находится в черном списке.</span></div>`;
+                    return false;
+                }
+            } catch (e) {
+                console.log("Ошибка проверки сетевого IP.");
+            }
+            return true;
+        }
 
-        // Вход и регистрация
-        function handleAuth() {
+        // Запуск проверки IP при открытии страницы
+        window.onload = fetchIPAndCheck;
+
+        async function loadFromCloud(key, defaultVal) {
+            try {
+                const res = await fetch(DB_BASE + key);
+                if (res.status === 404) return defaultVal;
+                return await res.json();
+            } catch (e) { return defaultVal; }
+        }
+
+        async function saveToCloud(key, data) {
+            try {
+                await fetch(DB_BASE + key, { method: 'PUT', body: JSON.stringify(data) });
+            } catch (e) { console.error("Ошибка синхронизации базы."); }
+        }
+
+        // Авторизация
+        async function handleAuth() {
+            const allowed = await fetchIPAndCheck();
+            if (!allowed) return;
+
             const login = document.getElementById('loginInput').value.trim();
             const pass = document.getElementById('passwordInput').value.trim();
 
             if (!login || !pass) {
-                alert('Пожалуйста, заполните все поля!');
+                alert('Заполните все поля ввода!');
                 return;
             }
 
+            document.getElementById('authBtn').innerText = 'Проверка доступа...';
+            let usersDB = await loadFromCloud('users', {});
+
             if (usersDB[login]) {
-                if (usersDB[login] !== pass) {
+                if (usersDB[login].pass !== pass) {
                     alert('Неверный пароль!');
+                    document.getElementById('authBtn').innerText = 'Войти';
                     return;
                 }
+                if (usersDB[login].banned) {
+                    alert('Данный аккаунт заблокирован!');
+                    document.getElementById('authBtn').innerText = 'Войти';
+                    return;
+                }
+                // Обновляем последний IP пользователя в системе
+                usersDB[login].ip = clientIP;
+                await saveToCloud('users', usersDB);
             } else {
-                usersDB[login] = pass;
-                localStorage.setItem('flowers_users', JSON.stringify(usersDB));
-                alert(`Создан новый аккаунт: ${login}`);
+                // Авторегистрация нового юзера
+                usersDB[login] = { pass: pass, ip: clientIP, banned: false };
+                await saveToCloud('users', usersDB);
             }
 
             currentUser = login;
             document.getElementById('userBadge').innerText = currentUser;
             
+            // Если зашел админ — включаем вкладку
+            if (currentUser === 'Admin') {
+                document.getElementById('adminTab').style.display = 'block';
+            } else {
+                document.getElementById('adminTab').style.display = 'none';
+            }
+
             document.getElementById('screenAuth').classList.remove('active');
             document.getElementById('screenApp').classList.add('active');
             
-            renderGrid();
+            switchTab('Приватное', document.querySelector('.nav-btn'));
+            document.getElementById('authBtn').innerText = 'Войти';
         }
 
-        // Выход из аккаунта (для удобного переключения)
         function handleLogout() {
             currentUser = null;
             document.getElementById('loginInput').value = '';
@@ -460,103 +539,199 @@
             document.getElementById('screenAuth').classList.add('active');
         }
 
-        // Переключение вкладок
         function switchTab(category, btn) {
             currentTab = category;
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderGrid();
-        }
-
-        // Удаление фото
-        function deletePhoto(e, id) {
-            e.stopPropagation(); // Отключает открытие полноэкранного режима при клике по крестику
-            if (confirm('Вы действительно хотите удалить фото?')) {
-                // Обновляем глобальный массив и перезаписываем LocalStorage
-                photosDB = photosDB.filter(p => p.id !== id);
-                localStorage.setItem('flowers_photos_main', JSON.stringify(photosDB));
+            
+            if (category === 'Люди') {
+                document.getElementById('galleryGrid').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'flex';
+                renderAdminPanel();
+            } else {
+                document.getElementById('galleryGrid').style.display = 'grid';
+                document.getElementById('adminPanel').style.display = 'none';
                 renderGrid();
             }
         }
 
-        // Правильный рендер сетки (9:16) с разграничением прав доступа
-        function renderGrid() {
+        async function deleteMedia(e, id) {
+            e.stopPropagation();
+            if (confirm('Удалить эту публикацию из облака навсегда?')) {
+                let mediaDB = await loadFromCloud('media', []);
+                mediaDB = mediaDB.filter(m => m.id !== id);
+                await saveToCloud('media', mediaDB);
+                renderGrid();
+            }
+        }
+
+        // Рендер контента (Фото и Видео)
+        async function renderGrid() {
             const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = '';
+            grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:40px;">Загрузка контента...</div>`;
 
-            // Каждый раз берем самую свежую базу данных
-            photosDB = JSON.parse(localStorage.getItem('flowers_photos_main')) || [];
-
+            let mediaDB = await loadFromCloud('media', []);
             let filtered = [];
 
             if (currentTab === 'Приватное') {
-                // ПОЛНАЯ ИЗОЛЯЦИЯ: Только фотографии, где категория "Приватное" И владелец — текущий юзер
-                filtered = photosDB.filter(p => p.category === 'Приватное' && p.owner === currentUser);
+                filtered = mediaDB.filter(m => m.category === 'Приватное' && m.owner === currentUser);
             } else {
-                // ОБЩИЙ ДОСТУП: Показываем фотографии из выбранной категории Овощи/Растения/Цветы ОТ ВСЕХ пользователей
-                filtered = photosDB.filter(p => p.category === currentTab);
+                filtered = mediaDB.filter(m => m.category === currentTab);
             }
 
-            // Новые фото отображаем первыми
-            const displayPhotos = [...filtered].reverse();
+            const displayItems = [...filtered].reverse();
+            grid.innerHTML = '';
 
-            if (displayPhotos.length === 0) {
+            if (displayItems.length === 0) {
                 grid.innerHTML = `<div style="grid-column:1/-1; padding:60px 10px; text-align:center; color:var(--text-muted); font-size:0.9rem;">В этой категории пока пусто</div>`;
                 return;
             }
 
-            displayPhotos.forEach(photo => {
+            displayItems.forEach(itemData => {
                 const item = document.createElement('div');
                 item.className = 'grid-item';
-                item.onclick = () => openImageViewer(photo.url);
+                item.onclick = () => openImageViewer(itemData.url, itemData.type);
                 
-                // Удалять фото может только тот, кто его загрузил
-                const deleteHtml = photo.owner === currentUser 
-                    ? `<button class="delete-btn" onclick="deletePhoto(event, ${photo.id})">✕</button>` 
+                const deleteHtml = (itemData.owner === currentUser || currentUser === 'Admin') 
+                    ? `<button class="delete-btn" onclick="deleteMedia(event, ${itemData.id})">✕</button>` 
                     : '';
 
-                // В общих вкладках подписываем автора фотографии
                 const authorHtml = currentTab !== 'Приватное' 
-                    ? `<div class="photo-author">От: ${photo.owner}</div>` 
+                    ? `<div class="photo-author">От: ${itemData.owner}</div>` 
                     : '';
 
-                item.innerHTML = `
-                    <img src="${photo.url}" loading="lazy" alt="plant">
-                    ${deleteHtml}
-                    ${authorHtml}
-                `;
+                let mediaHtml = '';
+                if (itemData.type === 'video') {
+                    mediaHtml = `
+                        <div class="video-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> VIDEO</div>
+                        <video src="${itemData.url}" muted playsinline preload="metadata"></video>
+                    `;
+                } else {
+                    mediaHtml = `<img src="${itemData.url}" loading="lazy" alt="img">`;
+                }
+
+                item.innerHTML = mediaHtml + deleteHtml + authorHtml;
                 grid.appendChild(item);
             });
         }
 
-        /* --- ПОЛНОЭКРАННЫЙ РЕЖИМ --- */
-        function openImageViewer(url) {
+        /* --- АДМИН ЛОГИКА --- */
+        async function renderAdminPanel() {
+            const usersList = document.getElementById('usersList');
+            const ipsList = document.getElementById('ipsList');
+            
+            let usersDB = await loadFromCloud('users', {});
+            let bannedIPs = await loadFromCloud('banned_ips', []);
+
+            usersList.innerHTML = '';
+            Object.keys(usersDB).forEach(user => {
+                if(user === 'Admin') return; // Себя банить нельзя
+                
+                const uData = usersDB[user];
+                const row = document.createElement('div');
+                row.className = 'admin-user-row';
+                
+                row.innerHTML = `
+                    <div>
+                        <strong>${user}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${uData.ip || 'Нет IP'})</span>
+                        <div style="font-size:0.75rem; color:${uData.banned ? 'var(--danger)' : 'var(--accent)'}">${uData.banned ? 'Забанен' : 'Активен'}</div>
+                    </div>
+                    <div class="admin-btns">
+                        <button class="adm-btn ${uData.banned ? 'unban' : 'ban'}" onclick="toggleUserBan('${user}', ${uData.banned})">
+                            ${uData.banned ? 'Разбанить' : 'Бан'}
+                        </button>
+                        <button class="adm-btn ip" onclick="banIP('${uData.ip}')">Бан IP</button>
+                    </div>
+                `;
+                usersList.appendChild(row);
+            });
+
+            ipsList.innerHTML = '';
+            if (bannedIPs.length === 0) {
+                ipsList.innerHTML = '<span style="color:var(--text-muted); font-size:0.85rem;">Заблокированных IP нет</span>';
+            } else {
+                bannedIPs.forEach(ip => {
+                    const row = document.createElement('div');
+                    row.className = 'admin-user-row';
+                    row.innerHTML = `
+                        <span style="font-family:monospace; color:var(--danger); font-weight:bold;">${ip}</span>
+                        <button class="adm-btn unban" onclick="unbanIP('${ip}')">Разбанить IP</button>
+                    `;
+                    ipsList.appendChild(row);
+                });
+            }
+        }
+
+        async function toggleUserBan(username, isBanned) {
+            let usersDB = await loadFromCloud('users', {});
+            if (usersDB[username]) {
+                usersDB[username].banned = !isBanned;
+                await saveToCloud('users', usersDB);
+                renderAdminPanel();
+            }
+        }
+
+        async function banIP(ip) {
+            if (!ip || ip === "0.0.0.0") { alert("Невозможно забанить пустой IP"); return; }
+            let bannedIPs = await loadFromCloud('banned_ips', []);
+            if (!bannedIPs.includes(ip)) {
+                bannedIPs.push(ip);
+                await saveToCloud('banned_ips', bannedIPs);
+                alert(`IP адрес ${ip} заблокирован намертво!`);
+                renderAdminPanel();
+            }
+        }
+
+        async function unbanIP(ip) {
+            let bannedIPs = await loadFromCloud('banned_ips', []);
+            bannedIPs = bannedIPs.filter(i => i !== ip);
+            await saveToCloud('banned_ips', bannedIPs);
+            alert(`IP адрес ${ip} разблокирован.`);
+            renderAdminPanel();
+        }
+
+        /* --- СМОТРЕТЬ НА ВЕСЬ ЭКРАН --- */
+        function openImageViewer(url, type) {
             const viewer = document.getElementById('imageViewer');
             const img = document.getElementById('viewerImg');
-            img.src = url;
+            const video = document.getElementById('viewerVideo');
+
+            if (type === 'video') {
+                img.style.display = 'none';
+                video.style.display = 'block';
+                video.src = url;
+            } else {
+                video.style.display = 'none';
+                video.pause();
+                img.style.display = 'block';
+                img.src = url;
+            }
             viewer.classList.add('active');
         }
 
         function closeImageViewer() {
-            document.getElementById('imageViewer').classList.remove('active');
+            const viewer = document.getElementById('imageViewer');
+            document.getElementById('viewerVideo').pause();
+            viewer.classList.remove('active');
         }
 
-        /* --- ОКНО ЗАГРУЗКИ --- */
+        /* --- ЗАГРУЗКА И ВАЛИДАЦИЯ МЕДИА В ОБЛАКО --- */
         function openModal() { 
             document.getElementById('uploadModal').classList.add('active'); 
-            document.getElementById('uploadCategory').value = currentTab === 'Приватное' ? 'Приватное' : currentTab;
+            document.getElementById('uploadCategory').value = currentTab === 'Люди' ? 'Приватное' : currentTab;
         }
         function closeModal() { 
             document.getElementById('uploadModal').classList.remove('active'); 
             document.getElementById('status').innerText = '';
             document.getElementById('fileInput').value = '';
+            document.getElementById('uploadBtn').disabled = false;
         }
 
-        /* --- СЕРВЕРНАЯ ЗАГРУЗКА --- */
-        async function uploadPhoto() {
+        async function uploadMedia() {
             const fileInput = document.getElementById('fileInput');
             const category = document.getElementById('uploadCategory').value;
             const status = document.getElementById('status');
+            const uploadBtn = document.getElementById('uploadBtn');
 
             if (!fileInput.files[0]) {
                 status.style.color = 'var(--danger)';
@@ -565,48 +740,54 @@
             }
 
             status.style.color = 'var(--text-main)';
-            status.innerText = 'Отправка на Cloudinary...';
+            status.innerText = 'Синхронизация с облаком...';
+            uploadBtn.disabled = true;
 
             const file = fileInput.files[0];
+            const isVideo = file.type.startsWith('video/');
+            
+            // Динамический выбор шлюза Cloudinary под тип контента
+            const endpoint = isVideo 
+                ? `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`
+                : `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
             formData.append('folder', category); 
 
             try {
-                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
+                const response = await fetch(endpoint, { method: 'POST', body: formData });
                 const data = await response.json();
 
                 if (data.secure_url) {
-                    // Читаем базу перед записью
-                    photosDB = JSON.parse(localStorage.getItem('flowers_photos_main')) || [];
+                    let mediaDB = await loadFromCloud('media', []);
                     
-                    photosDB.push({
+                    mediaDB.push({
                         id: new Date().getTime(),
                         url: data.secure_url,
                         category: category,
-                        owner: currentUser // Привязываем автора
+                        owner: currentUser,
+                        type: isVideo ? 'video' : 'image' // Запоминаем тип файла
                     });
                     
-                    localStorage.setItem('flowers_photos_main', JSON.stringify(photosDB));
+                    await saveToCloud('media', mediaDB);
 
                     status.style.color = 'var(--accent)';
                     status.innerText = 'Успешно опубликовано!';
                     setTimeout(() => {
                         closeModal();
-                        renderGrid();
+                        if(currentTab !== 'Люди') renderGrid();
                     }, 1000);
                 } else {
                     status.style.color = 'var(--danger)';
-                    status.innerText = 'Ошибка сервера Cloudinary.';
+                    status.innerText = 'Сервер отклонил файл.';
+                    uploadBtn.disabled = false;
                 }
             } catch (err) {
                 status.style.color = 'var(--danger)';
-                status.innerText = 'Ошибка отправки сети.';
+                status.innerText = 'Ошибка сети при передаче.';
+                uploadBtn.disabled = false;
             }
         }
     </script>
