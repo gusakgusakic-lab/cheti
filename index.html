@@ -6,16 +6,15 @@
     <title>Порно360</title>
     <style>
         :root {
-            --bg-main: #0d1117;
-            --bg-card: #161b22;
-            --bg-input: #21262d;
+            --bg-main: #090d16;
+            --bg-card: #121824;
+            --bg-input: #1b2434;
             --accent: #2ea043;
             --accent-hover: #238636;
             --text-main: #f0f6fc;
-            --text-muted: #8b949e;
-            --border: #30363d;
+            --text-muted: #7d8a9e;
+            --border: #212e46;
             --danger: #f85149;
-            --danger-hover: #da3633;
         }
 
         * {
@@ -24,13 +23,15 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--bg-main);
             color: var(--text-main);
-            overflow-x: hidden;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
         .screen {
@@ -40,258 +41,236 @@
             position: fixed;
             top: 0;
             left: 0;
+            flex-direction: column;
         }
         
         .screen.active {
             display: flex;
-            flex-direction: column;
         }
 
-        /* --- Экран 1: Авторизация --- */
+        /* --- ЭКРАН АВТОРИЗАЦИИ --- */
         .auth-screen {
             justify-content: center;
             align-items: center;
             padding: 20px;
+            background: linear-gradient(135deg, #090d16 0%, #111a2e 100%);
         }
 
         .auth-container {
             background: var(--bg-card);
             width: 100%;
-            max-width: 360px;
-            padding: 30px 20px;
-            border-radius: 16px;
+            max-width: 350px;
+            padding: 35px 25px;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
         .auth-container h2 {
-            color: var(--accent);
-            margin-top: 0;
-            font-size: 1.6rem;
+            color: var(--text-main);
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        .ip-badge {
-            font-size: 0.85rem;
+        .auth-container p {
             color: var(--text-muted);
-            background: var(--bg-main);
-            padding: 6px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
-        .code-input {
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .auth-input {
             width: 100%;
             padding: 14px;
             background: var(--bg-input);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-main);
-            font-family: monospace;
-            font-size: 1.2rem;
-            text-align: center;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            font-size: 1rem;
+            transition: border-color 0.2s;
         }
 
-        .code-input:focus {
+        .auth-input:focus {
             outline: none;
             border-color: var(--accent);
         }
 
-        /* --- Экран 2: Главный экран --- */
+        /* --- ОСНОВНОЙ ИНТЕРФЕЙС --- */
         header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
-            padding: 10px 15px;
+            padding: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 10;
+            position: relative;
         }
 
         header h1 {
             margin: 0;
-            font-size: 1.3rem;
-            color: var(--accent);
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
         }
 
-        .user-code {
-            font-family: monospace;
-            font-size: 0.75rem;
+        header h1 span { color: var(--accent); }
+
+        .user-badge {
+            font-size: 0.8rem;
             color: var(--text-muted);
-            background: var(--bg-main);
-            padding: 6px 10px;
-            border-radius: 6px;
-            max-width: 90px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            background: var(--bg-input);
+            padding: 6px 12px;
+            border-radius: 20px;
             border: 1px solid var(--border);
+            font-weight: 600;
         }
 
+        /* Навигационная панель (Вкладки) */
         .navigation {
             display: flex;
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
-            z-index: 10;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .navigation::-webkit-scrollbar { display: none; }
 
         .nav-btn {
             flex: 1;
+            min-width: 85px;
             background: none;
             border: none;
             color: var(--text-muted);
-            padding: 12px 5px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            padding: 14px 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
             text-align: center;
-            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
         }
 
         .nav-btn.active {
-            color: var(--accent);
+            color: var(--text-main);
             border-bottom-color: var(--accent);
         }
 
+        /* Контентная зона */
         .content-area {
             flex: 1;
-            position: relative;
             background: var(--bg-main);
-            overflow: hidden;
-        }
-
-        /* Сетка: Сделано ровно по 2 фото в ряд, карточки стали меньше */
-        .grid-view {
-            display: none;
-            height: 100%;
             overflow-y: auto;
-            padding: 10px;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            padding: 12px;
+            padding-bottom: 80px; /* Отступ для плавающей кнопки */
         }
 
-        .grid-view.active {
+        /* Сетка 2 в ряд с пропорциями 9:16 */
+        .grid-view {
             display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
         }
 
         .grid-item {
             background: var(--bg-card);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border);
-            height: 140px; /* Уменьшенная высота для баланса */
             position: relative;
+            /* Формула для строгого соотношения 9:16 */
+            aspect-ratio: 9 / 16; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
         }
 
         .grid-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s;
         }
 
-        /* Кнопка удаления поверх фото в сетке */
-        .delete-grid-btn {
+        .grid-item:active img {
+            transform: scale(0.97);
+        }
+
+        /* Кнопка удаления */
+        .delete-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(248, 81, 73, 0.85);
+            top: 8px;
+            right: 8px;
+            background: rgba(248, 81, 73, 0.9);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-size: 0.75rem;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            backdrop-filter: blur(2px);
-        }
-
-        /* Полноэкранная Лента Свайпов */
-        .feed-view {
-            display: none;
-            height: 100%;
-            width: 100%;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scrollbar-width: none;
-        }
-
-        .feed-view::-webkit-scrollbar {
-            display: none;
-        }
-
-        .feed-view.active {
-            display: block;
-        }
-
-        .feed-item {
-            height: 100%;
-            width: 100%;
-            scroll-snap-align: start;
-            position: relative;
-            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        .feed-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .feed-meta {
-            position: absolute;
-            bottom: 30px;
-            left: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px;
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
+        /* Плавающая кнопка «Добавить» */
+        .fab-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(46, 160, 67, 0.4);
+            cursor: pointer;
+            z-index: 10;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 8px;
         }
+        .fab-btn:hover { background: var(--accent-hover); }
 
-        .feed-meta .cat {
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        /* Базовые кнопки */
+        /* --- КНОПКИ И МОДАЛКИ --- */
         .btn {
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background 0.2s;
+            width: 100%;
         }
         .btn:hover { background: var(--accent-hover); }
-        .btn-secondary { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { background: var(--danger-hover); }
 
-        /* Модалка загрузки */
+        /* Окно загрузки */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.85);
+            background: rgba(5, 7, 12, 0.9);
             z-index: 100;
             display: none;
             justify-content: center;
@@ -302,73 +281,94 @@
         .modal-body {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 25px 20px;
-            border-radius: 16px;
+            padding: 25px;
+            border-radius: 20px;
             width: 100%;
             max-width: 340px;
         }
-        .modal-body h3 { margin-top: 0; color: var(--text-main); }
+        .modal-body h3 { margin: 0 0 15px 0; font-size: 1.3rem; }
         .modal-body select, .modal-body input[type="file"] {
             width: 100%;
             padding: 12px;
             background: var(--bg-input);
             border: 1px solid var(--border);
             color: var(--text-main);
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 15px;
             font-size: 1rem;
         }
-        #status {
-            text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
+        #status { text-align: center; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; }
         .modal-actions { display: flex; gap: 10px; }
-        .modal-actions button { flex: 1; }
+        .modal-actions button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;}
+        .btn-cancel { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); }
+
+        /* --- ПОЛНОЭКРАННЫЙ ПРОСМОТР ФОТО --- */
+        .viewer-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .viewer-overlay.active { display: flex; }
+        .viewer-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
 
     <div id="screenAuth" class="screen auth-screen active">
         <div class="auth-container">
-            <h2>Цветы360</h2>
-            <div class="ip-badge" id="ipLabel">Проверка IP...</div>
+            <h2>Порно360</h2>
+            <p>Вход или регистрация</p>
             
-            <div id="authForm">
-                <input type="text" id="inputCode" class="code-input" placeholder="ХХХХХ-ХХХХХ..." maxlength="29">
-                <button class="btn" style="width: 100%; padding: 14px;" onclick="handleLogin()">Войти по коду</button>
-                <div style="margin: 15px 0; color: var(--text-muted); font-size: 0.85rem;">или</div>
-                <button class="btn btn-secondary" style="width: 100%;" id="genBtn" onclick="handleRegister()">Создать новый код для этого IP</button>
+            <div class="input-group">
+                <label for="loginInput">ЛОГИН</label>
+                <input type="text" id="loginInput" class="auth-input" placeholder="Имя пользователя">
             </div>
+            
+            <div class="input-group">
+                <label for="passwordInput">ПАРОЛЬ</label>
+                <input type="password" id="passwordInput" class="auth-input" placeholder="••••••••">
+            </div>
+            
+            <button class="btn" style="margin-top: 10px;" onclick="handleAuth()">Войти / Создать учётную запись</button>
         </div>
     </div>
 
     <div id="screenApp" class="screen">
         <header>
-            <div class="user-code" id="myCodeDisplay">-----</div>
-            <h1>Цветы360</h1>
-            <button class="btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openModal()">Добавить порно</button>
+            <h1>Порно<span>360</span></h1>
+            <div class="user-badge" id="userBadge">User</div>
         </header>
 
         <div class="navigation">
-            <button class="nav-btn active" onclick="switchTab('ВсЁ порно', this)">ВсЁ порно</button>
+            <button class="nav-btn active" onclick="switchTab('Приватное', this)">Приватное</button>
             <button class="nav-btn" onclick="switchTab('Аниме', this)">Аниме</button>
             <button class="nav-btn" onclick="switchTab('Реал', this)">Реал</button>
             <button class="nav-btn" onclick="switchTab('Фурри', this)">Фурри</button>
         </div>
 
         <div class="content-area">
-            <div id="viewFeed" class="feed-view active"></div>
-
-            <div id="viewGrid" class="grid-view"></div>
+            <div id="galleryGrid" class="grid-view"></div>
         </div>
+
+        <button class="fab-btn" onclick="openModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Добавить порно
+        </button>
     </div>
 
     <div id="uploadModal" class="modal">
         <div class="modal-body">
-            <h3>Новая публикация</h3>
+            <h3>Новая порнография</h3>
             <select id="uploadCategory">
+                <option value="Приватное">Приватное</option>
                 <option value="Аниме">Аниме</option>
                 <option value="Реал">Реал</option>
                 <option value="Фурри">Фурри</option>
@@ -376,151 +376,132 @@
             <input type="file" id="fileInput" accept="image/*">
             <div id="status"></div>
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal()">Отмена</button>
-                <button class="btn" onclick="uploadPhoto()">Отправить</button>
+                <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+                <button class="btn" style="width:auto; flex:1;" onclick="uploadPhoto()">Загрузить</button>
             </div>
         </div>
+    </div>
+
+    <div id="imageViewer" class="viewer-overlay" onclick="closeImageViewer()">
+        <img id="viewerImg" src="" alt="Full View">
     </div>
 
     <script>
         const CLOUD_NAME = 'dic7fcdgy';
         const UPLOAD_PRESET = 'ctefeth_780';
 
-        let currentIP = '';
-        let currentTab = 'Все';
+        let currentUser = null;
+        let currentTab = 'Приватное';
 
-        let ipRegistry = JSON.parse(localStorage.getItem('flowers_ip_registry')) || {}; 
-        let localPhotos = JSON.parse(localStorage.getItem('flowers_photos_db')) || [];
+        // Базы данных в LocalStorage
+        let usersDB = JSON.parse(localStorage.getItem('flowers_users')) || {}; 
+        let photosDB = JSON.parse(localStorage.getItem('flowers_photos_main')) || [];
 
-        async function checkIP() {
-            try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                currentIP = data.ip;
-                document.getElementById('ipLabel').innerText = `Ваш IP: ${currentIP}`;
-                
-                if (ipRegistry[currentIP]) {
-                    document.getElementById('genBtn').style.display = 'none';
-                    document.getElementById('inputCode').placeholder = "Введите ваш хуй 5х5";
+        // Логика авторизации
+        function handleAuth() {
+            const login = document.getElementById('loginInput').value.trim();
+            const pass = document.getElementById('passwordInput').value.trim();
+
+            if (!login || !pass) {
+                alert('Заполните все хуи!');
+                return;
+            }
+
+            if (usersDB[login]) {
+                // Если пользователь существует, проверяем пароль
+                if (usersDB[login] !== pass) {
+                    alert('idi НахYй!');
+                    return;
                 }
-            } catch (e) {
-                currentIP = '127.0.0.1';
-                document.getElementById('ipLabel').innerText = `Локальный IP режим`;
+            } else {
+                // Если нет — регистрируем нового
+                usersDB[login] = pass;
+                localStorage.setItem('flowers_users', JSON.stringify(usersDB));
+                alert(`${login} Ебётся!`);
             }
-        }
 
-        function handleRegister() {
-            if (ipRegistry[currentIP]) {
-                alert('На вашем IP уже зарегистрирован член!');
-                return;
-            }
+            currentUser = login;
+            document.getElementById('userBadge').innerText = currentUser;
             
-            const r = () => Math.random().toString(36).substring(2, 7).toUpperCase();
-            const newCode = `${r()}-${r()}-${r()}-${r()}-${r()}`;
-            
-            ipRegistry[currentIP] = newCode;
-            localStorage.setItem('flowers_ip_registry', JSON.stringify(ipRegistry));
-            
-            document.getElementById('inputCode').value = newCode;
-            document.getElementById('genBtn').style.display = 'none';
-            alert(`Код создан и привязан к IP:\n${newCode}`);
-        }
-
-        function handleLogin() {
-            const enteredCode = document.getElementById('inputCode').value.trim().toUpperCase();
-            const savedCode = ipRegistry[currentIP];
-
-            if (!enteredCode) {
-                alert('Введите код!');
-                return;
-            }
-
-            if (!savedCode) {
-                ipRegistry[currentIP] = enteredCode;
-                localStorage.setItem('flowers_ip_registry', JSON.stringify(ipRegistry));
-            } else if (savedCode !== enteredCode) {
-                alert('Ошибка! К этому IP привязан другой код.');
-                return;
-            }
-
+            // Переключаем экраны
             document.getElementById('screenAuth').classList.remove('active');
             document.getElementById('screenApp').classList.add('active');
-            document.getElementById('myCodeDisplay').innerText = enteredCode;
             
-            renderContent();
+            renderGrid();
         }
 
+        // Переключение категорий
         function switchTab(category, btn) {
             currentTab = category;
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderContent();
+            renderGrid();
         }
 
-        // Удаление фото по ID/индексу времени создания
-        function deletePhoto(timestamp) {
-            if (confirm('Вы уверены, что хотите удалить это порно?')) {
-                localPhotos = localPhotos.filter(p => p.id !== timestamp);
-                localStorage.setItem('flowers_photos_db', JSON.stringify(localPhotos));
-                renderContent();
+        // Удаление фотографии
+        function deletePhoto(e, id) {
+            e.stopPropagation(); // Чтобы не открывался полноэкранный режим при клике на крестик
+            if (confirm('Удалить эту порнографию?')) {
+                photosDB = photosDB.filter(p => p.id !== id);
+                localStorage.setItem('flowers_photos_main', JSON.stringify(photosDB));
+                renderGrid();
             }
         }
 
-        function renderContent() {
-            const feedView = document.getElementById('viewFeed');
-            const gridView = document.getElementById('viewGrid');
-            
-            const filtered = [...localPhotos]
-                .reverse()
-                .filter(p => currentTab === 'Все' || p.category === currentTab);
+        // Отрисовка галереи (9:16)
+        function renderGrid() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
 
-            if (currentTab === 'ВсЁ порно') {
-                feedView.classList.add('active');
-                gridView.classList.remove('active');
-                feedView.innerHTML = '';
+            let filtered = [];
 
-                if (filtered.length === 0) {
-                    feedView.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-muted)">Лента пуста. Добавьте первое порно!</div>`;
-                    return;
-                }
-
-                filtered.forEach(photo => {
-                    const item = document.createElement('div');
-                    item.className = 'feed-item';
-                    item.innerHTML = `
-                        <img src="${photo.url}" alt="photo">
-                        <div class="feed-meta">
-                            <div>
-                                <div class="cat">${photo.category}</div>
-                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">От: ${photo.author}</div>
-                            </div>
-                            <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75rem;" onclick="deletePhoto(${photo.id})">Удалить</button>
-                        </div>
-                    `;
-                    feedView.appendChild(item);
-                });
+            if (currentTab === 'Приватное') {
+                // В приватном показываем только фото текущего пользователя с категорией "Приватное"
+                filtered = photosDB.filter(p => p.category === 'Приватное' && p.owner === currentUser);
             } else {
-                gridView.classList.add('active');
-                feedView.classList.remove('active');
-                gridView.innerHTML = '';
-
-                if (filtered.length === 0) {
-                    gridView.innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--text-muted)">В этой категории нет фото</div>`;
-                    return;
-                }
-
-                filtered.forEach(photo => {
-                    const item = document.createElement('div');
-                    item.className = 'grid-item';
-                    item.innerHTML = `
-                        <img src="${photo.url}" alt="img">
-                        <button class="delete-grid-btn" onclick="deletePhoto(${photo.id})">✕</button>
-                    `;
-                    gridView.appendChild(item);
-                });
+                // В общих вкладках показываем фото всех пользователей из этой категории
+                filtered = photosDB.filter(p => p.category === currentTab);
             }
+
+            // Новые фото сверху
+            filtered.reverse();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; padding:50px 10px; text-align:center; color:var(--text-muted); font-size:0.9rem;">Здесь пока ничего нет</div>`;
+                return;
+            }
+
+            filtered.forEach(photo => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.onclick = () => openImageViewer(photo.url);
+                
+                // Кнопку удаления показываем, только если фото принадлежит текущему юзеру
+                const deleteHtml = photo.owner === currentUser 
+                    ? `<button class="delete-btn" onclick="deletePhoto(event, ${photo.id})">✕</button>` 
+                    : '';
+
+                item.innerHTML = `
+                    <img src="${photo.url}" loading="lazy" alt="img">
+                    ${deleteHtml}
+                `;
+                grid.appendChild(item);
+            });
         }
 
+        /* --- ПОЛНОЭКРАННЫЙ ПРОСМОТР --- */
+        function openImageViewer(url) {
+            const viewer = document.getElementById('imageViewer');
+            const img = document.getElementById('viewerImg');
+            img.src = url;
+            viewer.classList.add('active');
+        }
+
+        function closeImageViewer() {
+            document.getElementById('imageViewer').classList.remove('active');
+        }
+
+        /* --- УПРАВЛЕНИЕ МОДАЛКОЙ ЗАГРУЗКИ --- */
         function openModal() { document.getElementById('uploadModal').classList.add('active'); }
         function closeModal() { 
             document.getElementById('uploadModal').classList.remove('active'); 
@@ -528,25 +509,26 @@
             document.getElementById('fileInput').value = '';
         }
 
+        /* --- СЕРВЕРНАЯ ЗАГРУЗКА НА CLOUDINARY --- */
         async function uploadPhoto() {
             const fileInput = document.getElementById('fileInput');
             const category = document.getElementById('uploadCategory').value;
             const status = document.getElementById('status');
 
             if (!fileInput.files[0]) {
-                status.style.color = 'crimson';
-                status.innerText = 'Выберите PDF файл!';
+                status.style.color = 'var(--danger)';
+                status.innerText = 'Выберите файл!';
                 return;
             }
 
             status.style.color = 'var(--text-main)';
-            status.innerText = 'Отправка на сервер...';
+            status.innerText = 'Загрузка на сервер...';
 
             const file = fileInput.files[0];
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
-            formData.append('folder', category);
+            formData.append('folder', category); // Сортировка по папкам на сервере Cloudinary
 
             try {
                 const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
@@ -557,31 +539,30 @@
                 const data = await response.json();
 
                 if (data.secure_url) {
-                    localPhotos.push({
-                        id: new Date().getTime(), // Уникальный ID для удаления
+                    // Сохраняем метаданные в локальную базу данных
+                    photosDB.push({
+                        id: new Date().getTime(),
                         url: data.secure_url,
                         category: category,
-                        author: ipRegistry[currentIP] || 'User'
+                        owner: currentUser
                     });
-                    localStorage.setItem('flowers_photos_db', JSON.stringify(localPhotos));
+                    localStorage.setItem('flowers_photos_main', JSON.stringify(photosDB));
 
                     status.style.color = 'var(--accent)';
-                    status.innerText = 'Успешно загружено!';
+                    status.innerText = 'Успешно опубликовано!';
                     setTimeout(() => {
                         closeModal();
-                        renderContent();
+                        renderGrid();
                     }, 1000);
                 } else {
-                    status.style.color = 'crimson';
+                    status.style.color = 'var(--danger)';
                     status.innerText = 'Ошибка загрузки.';
                 }
             } catch (err) {
-                status.style.color = 'crimson';
-                status.innerText = 'Ошибка сети.';
+                status.style.color = 'var(--danger)';
+                status.innerText = 'Ошибка сети при отправке.';
             }
         }
-
-        window.onload = checkIP;
     </script>
 </body>
 </html>
