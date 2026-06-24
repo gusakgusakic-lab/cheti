@@ -14,6 +14,8 @@
             --text-main: #f0f6fc;
             --text-muted: #8b949e;
             --border: #30363d;
+            --danger: #f85149;
+            --danger-hover: #da3633;
         }
 
         * {
@@ -45,7 +47,7 @@
             flex-direction: column;
         }
 
-        /* --- Экран 1: Авторизация (Тёмный стиль) --- */
+        /* --- Экран 1: Авторизация --- */
         .auth-screen {
             justify-content: center;
             align-items: center;
@@ -100,7 +102,7 @@
             border-color: var(--accent);
         }
 
-        /* --- Экран 2: Форум и Мобильная Лента --- */
+        /* --- Экран 2: Главный экран --- */
         header {
             background: var(--bg-card);
             border-bottom: 1px solid var(--border);
@@ -134,7 +136,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Навигация / Фильтры */
         .navigation {
             display: flex;
             background: var(--bg-card);
@@ -160,7 +161,6 @@
             border-bottom-color: var(--accent);
         }
 
-        /* Контентная зона */
         .content-area {
             flex: 1;
             position: relative;
@@ -168,14 +168,14 @@
             overflow: hidden;
         }
 
-        /* Обычная сетка для категорий */
+        /* Сетка: Сделано ровно по 2 фото в ряд, карточки стали меньше */
         .grid-view {
             display: none;
             height: 100%;
             overflow-y: auto;
-            padding: 15px;
+            padding: 10px;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
 
         .grid-view.active {
@@ -187,7 +187,7 @@
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border);
-            height: 180px;
+            height: 140px; /* Уменьшенная высота для баланса */
             position: relative;
         }
 
@@ -197,7 +197,23 @@
             object-fit: cover;
         }
 
-        /* Полноэкранная Лента Свайпов (TikTok стиль) */
+        /* Кнопка удаления поверх фото в сетке */
+        .delete-grid-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(248, 81, 73, 0.85);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Полноэкранная Лента Свайпов */
         .feed-view {
             display: none;
             height: 100%;
@@ -237,11 +253,14 @@
             bottom: 30px;
             left: 15px;
             right: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 12px;
             border-radius: 12px;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .feed-meta .cat {
@@ -251,7 +270,7 @@
             text-transform: uppercase;
         }
 
-        /* Кнопки */
+        /* Базовые кнопки */
         .btn {
             background: var(--accent);
             color: #fff;
@@ -263,9 +282,10 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-
         .btn:hover { background: var(--accent-hover); }
         .btn-secondary { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: var(--danger-hover); }
 
         /* Модалка загрузки */
         .modal {
@@ -313,13 +333,13 @@
     <div id="screenAuth" class="screen auth-screen active">
         <div class="auth-container">
             <h2>Цветы360</h2>
-            <div class="ip-badge" id="ipLabel">Проверка хуя...</div>
+            <div class="ip-badge" id="ipLabel">Проверка IP...</div>
             
             <div id="authForm">
                 <input type="text" id="inputCode" class="code-input" placeholder="ХХХХХ-ХХХХХ..." maxlength="29">
-                <button class="btn" style="width: 100%; padding: 14px;" onclick="handleLogin()">Войти по хуй!</button>
+                <button class="btn" style="width: 100%; padding: 14px;" onclick="handleLogin()">Войти по коду</button>
                 <div style="margin: 15px 0; color: var(--text-muted); font-size: 0.85rem;">или</div>
-                <button class="btn btn-secondary" style="width: 100%;" id="genBtn" onclick="handleRegister()">Создать новый код для хуя!</button>
+                <button class="btn btn-secondary" style="width: 100%;" id="genBtn" onclick="handleRegister()">Создать новый код для этого IP</button>
             </div>
         </div>
     </div>
@@ -332,10 +352,10 @@
         </header>
 
         <div class="navigation">
-            <button class="nav-btn active" onclick="switchTab('Все', this)">Все (Лента)</button>
-            <button class="nav-btn" onclick="switchTab('Аниме', this)">Цветы</button>
-            <button class="nav-btn" onclick="switchTab('Реал', this)">Растения</button>
-            <button class="nav-btn" onclick="switchTab('Фурри', this)">Овощи</button>
+            <button class="nav-btn active" onclick="switchTab('ВсЁ порно', this)">ВсЁ порно</button>
+            <button class="nav-btn" onclick="switchTab('Аниме', this)">Аниме</button>
+            <button class="nav-btn" onclick="switchTab('Реал', this)">Реал</button>
+            <button class="nav-btn" onclick="switchTab('Фурри', this)">Фурри</button>
         </div>
 
         <div class="content-area">
@@ -347,11 +367,11 @@
 
     <div id="uploadModal" class="modal">
         <div class="modal-body">
-            <h3>Новая порнография</h3>
+            <h3>Новая публикация</h3>
             <select id="uploadCategory">
-                <option value="Аниме">Цветы</option>
-                <option value="Реал">Растения</option>
-                <option value="Фурри">Овощи</option>
+                <option value="Аниме">Аниме</option>
+                <option value="Реал">Реал</option>
+                <option value="Фурри">Фурри</option>
             </select>
             <input type="file" id="fileInput" accept="image/*">
             <div id="status"></div>
@@ -363,18 +383,15 @@
     </div>
 
     <script>
-        // Данные аккаунта Cloudinary
         const CLOUD_NAME = 'dic7fcdgy';
         const UPLOAD_PRESET = 'ctefeth_780';
 
         let currentIP = '';
         let currentTab = 'Все';
 
-        // Локальная база связок IP -> Ключ и загруженных фото
         let ipRegistry = JSON.parse(localStorage.getItem('flowers_ip_registry')) || {}; 
         let localPhotos = JSON.parse(localStorage.getItem('flowers_photos_db')) || [];
 
-        // Инициализация
         async function checkIP() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
@@ -382,10 +399,9 @@
                 currentIP = data.ip;
                 document.getElementById('ipLabel').innerText = `Ваш IP: ${currentIP}`;
                 
-                // Если для этого IP уже зарегистрирован код, блокируем генерацию нового
                 if (ipRegistry[currentIP]) {
                     document.getElementById('genBtn').style.display = 'none';
-                    document.getElementById('inputCode').placeholder = "Введите ваш код 5х5";
+                    document.getElementById('inputCode').placeholder = "Введите ваш хуй 5х5";
                 }
             } catch (e) {
                 currentIP = '127.0.0.1';
@@ -393,10 +409,9 @@
             }
         }
 
-        // Регистрация (Создание уникального кода 5х5)
         function handleRegister() {
             if (ipRegistry[currentIP]) {
-                alert('На вашем IP уже зарегистрирован код! Используйте его для входа.');
+                alert('На вашем IP уже зарегистрирован член!');
                 return;
             }
             
@@ -408,10 +423,9 @@
             
             document.getElementById('inputCode').value = newCode;
             document.getElementById('genBtn').style.display = 'none';
-            alert(`Ваш личный код создан и привязан к IP:\n${newCode}\n\nСохраните его!`);
+            alert(`Код создан и привязан к IP:\n${newCode}`);
         }
 
-        // Авторизация по коду
         function handleLogin() {
             const enteredCode = document.getElementById('inputCode').value.trim().toUpperCase();
             const savedCode = ipRegistry[currentIP];
@@ -422,15 +436,13 @@
             }
 
             if (!savedCode) {
-                // Если на данном IP еще нет кодов вообще, регистрируем этот код за ним
                 ipRegistry[currentIP] = enteredCode;
                 localStorage.setItem('flowers_ip_registry', JSON.stringify(ipRegistry));
             } else if (savedCode !== enteredCode) {
-                alert('Ошибка! К этому IP привязан совершенно другой код.');
+                alert('Ошибка! К этому IP привязан другой код.');
                 return;
             }
 
-            // Успешный вход
             document.getElementById('screenAuth').classList.remove('active');
             document.getElementById('screenApp').classList.add('active');
             document.getElementById('myCodeDisplay').innerText = enteredCode;
@@ -438,7 +450,6 @@
             renderContent();
         }
 
-        // Переключение вкладок
         function switchTab(category, btn) {
             currentTab = category;
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -446,23 +457,30 @@
             renderContent();
         }
 
-        // Отрисовка контента (Сетка или Свайп-Лента)
+        // Удаление фото по ID/индексу времени создания
+        function deletePhoto(timestamp) {
+            if (confirm('Вы уверены, что хотите удалить это порно?')) {
+                localPhotos = localPhotos.filter(p => p.id !== timestamp);
+                localStorage.setItem('flowers_photos_db', JSON.stringify(localPhotos));
+                renderContent();
+            }
+        }
+
         function renderContent() {
             const feedView = document.getElementById('viewFeed');
             const gridView = document.getElementById('viewGrid');
             
-            // Фильтруем массив и разворачиваем (сначала новые)
             const filtered = [...localPhotos]
                 .reverse()
                 .filter(p => currentTab === 'Все' || p.category === currentTab);
 
-            if (currentTab === 'Все') {
+            if (currentTab === 'ВсЁ порно') {
                 feedView.classList.add('active');
                 gridView.classList.remove('active');
                 feedView.innerHTML = '';
 
                 if (filtered.length === 0) {
-                    feedView.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-muted)">Лента пуста. Добавьте первое фото!</div>`;
+                    feedView.innerHTML = `<div style="padding:40px; text-align:center; color:var(--text-muted)">Лента пуста. Добавьте первое порно!</div>`;
                     return;
                 }
 
@@ -472,8 +490,11 @@
                     item.innerHTML = `
                         <img src="${photo.url}" alt="photo">
                         <div class="feed-meta">
-                            <div class="cat">${photo.category}</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Загрузил: ${photo.author}</div>
+                            <div>
+                                <div class="cat">${photo.category}</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">От: ${photo.author}</div>
+                            </div>
+                            <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75rem;" onclick="deletePhoto(${photo.id})">Удалить</button>
                         </div>
                     `;
                     feedView.appendChild(item);
@@ -491,13 +512,15 @@
                 filtered.forEach(photo => {
                     const item = document.createElement('div');
                     item.className = 'grid-item';
-                    item.innerHTML = `<img src="${photo.url}" alt="img">`;
+                    item.innerHTML = `
+                        <img src="${photo.url}" alt="img">
+                        <button class="delete-grid-btn" onclick="deletePhoto(${photo.id})">✕</button>
+                    `;
                     gridView.appendChild(item);
                 });
             }
         }
 
-        // Модальное окно управления
         function openModal() { document.getElementById('uploadModal').classList.add('active'); }
         function closeModal() { 
             document.getElementById('uploadModal').classList.remove('active'); 
@@ -505,7 +528,6 @@
             document.getElementById('fileInput').value = '';
         }
 
-        // Загрузка фото на Cloudinary с распределением по папкам
         async function uploadPhoto() {
             const fileInput = document.getElementById('fileInput');
             const category = document.getElementById('uploadCategory').value;
@@ -513,7 +535,7 @@
 
             if (!fileInput.files[0]) {
                 status.style.color = 'crimson';
-                status.innerText = 'Выберите файл!';
+                status.innerText = 'Выберите PDF файл!';
                 return;
             }
 
@@ -524,8 +546,6 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', UPLOAD_PRESET);
-            
-            // Передаем папку назначения (группы: Цветы, Растения, Овощи)
             formData.append('folder', category);
 
             try {
@@ -537,11 +557,11 @@
                 const data = await response.json();
 
                 if (data.secure_url) {
-                    // Сохраняем в локальную базу данных структуру
                     localPhotos.push({
+                        id: new Date().getTime(), // Уникальный ID для удаления
                         url: data.secure_url,
                         category: category,
-                        author: ipRegistry[currentIP] || 'Unknown'
+                        author: ipRegistry[currentIP] || 'User'
                     });
                     localStorage.setItem('flowers_photos_db', JSON.stringify(localPhotos));
 
@@ -553,11 +573,11 @@
                     }, 1000);
                 } else {
                     status.style.color = 'crimson';
-                    status.innerText = 'Ошибка Cloudinary. Проверьте Preset.';
+                    status.innerText = 'Ошибка загрузки.';
                 }
             } catch (err) {
                 status.style.color = 'crimson';
-                status.innerText = 'Ошибка сети при отправке.';
+                status.innerText = 'Ошибка сети.';
             }
         }
 
